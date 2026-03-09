@@ -18,11 +18,11 @@ class ToDo(db.Model):
             "version":"1.0.0",
             "created_by":"stephen K mulwa"
         })
-        @app.route('/delete/<int:id>')
-        def delete(id):
-            ToDo.query.filter_by(id=id).delete()
-            db.session.commit()
-            return redirect(url_for('index'))
+    @app.route('/delete/<int:id>')
+    def delete(id):
+        ToDo.query.filter_by(id=id).delete()
+        db.session.commit()
+        return redirect(url_for('index'))
 if __name__ == '__ main_':
     db.create_all()
     app.run(debug=True)
