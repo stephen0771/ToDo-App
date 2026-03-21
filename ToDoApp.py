@@ -41,14 +41,48 @@ def index():
         "inspected_by":"Slyvester Musyoki"
     })
 
-@app.route('/add', methods=['POST'])
+@app.route('/todo', methods=['POST'])
 def add():
-    title = request.form['title']
-    description = request.form['description']
+    req= request.get_json(silent=True)
+    title = req.get('title')
+    description = req.get('description')
     new_todo = Todo(title=title, description=description)
     db.session.add(new_todo)
     db.session.commit()
-    return jsonify(new_todo.to_dict(),201)
+    return jsonify(new_todo.to_dict())
+
+
+@app.route('/todo', methods=['GET'])
+def get_todos():
+    todos = Todo.query.all()
+    return jsonify([todo.to_dict() for todo in todos])
+
+@app.route('/todo/<int:todo_id>', methods=['GET'])
+def get_todo(todo_id):
+    todo = Todo.query.get_or_404(todo_id)
+    return jsonify(todo.to_dict())
+
+@app.route('/todo/<int:todo_id>', methods=['PUT'])
+def update_todo(todo_id):
+    todo = Todo.query.get_or_404(todo_id)
+    req = request.get_json(silent=True)
+    todo.title = req.get('title', todo.title)
+    todo.description = req.get('description', todo.description)
+    todo.completed = req.get('completed', todo.completed)
+    db.session.commit()
+    return jsonify(todo.to_dict())
+
+@app.route('/todo/<int:todo_id>', methods=['DELETE'])
+def delete_todo(todo_id):
+    todo = Todo.query.get_or_404(todo_id)
+    db.session.delete(todo)
+    db.session.commit()
+    return jsonify({"message": "Todo deleted successfully"})
+    db.session.add(new_todo)
+    db.session.commit()
+    return jsonify(new_todo.to_dict())
+
+
 
 if __name__ == '__ main_':
     db.create_all()
