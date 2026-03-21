@@ -1,0 +1,15 @@
+# Flask specific
+instance/
+.webassets-cache
+
+# Python standard
+*.pyc
+__pycache__/
+.Python
+flaskenv/
+env/
+build/
+dist/
+
+# OS generated files
+.DS_Store
