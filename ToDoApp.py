@@ -88,6 +88,22 @@ def toggle_todo(todo_id):
     task.completed = not task.completed
     db.session.commit()
     return jsonify({ ... }), 200
+
+@app.route('/stats', methods=['GET'])
+def get_stats():
+    total = Todo.query.count()
+    completed = Todo.query.filter_by(completed=True).count()
+    pending = total - completed
+    
+    rate = round((completed / total) * 100, 2) if total > 0 else 0
+    
+    return {
+        "total_todos": total,
+        "completed": completed,
+        "pending": pending,
+        "completion_rate": rate
+    }, 200
+
  
 
 
