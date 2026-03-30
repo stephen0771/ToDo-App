@@ -82,6 +82,14 @@ def delete_todo(todo_id):
     db.session.commit()
     return jsonify(new_todo.to_dict())
 
+@app.route('/todo/<int:todo_id>/toggle', methods=['PATCH'])
+def toggle_todo(todo_id):
+    task = Task.query.get_or_404(todo_id)
+    task.completed = not task.completed
+    db.session.commit()
+    return jsonify({ ... }), 200
+ 
+
 
 
 if __name__ == '__ main_':
